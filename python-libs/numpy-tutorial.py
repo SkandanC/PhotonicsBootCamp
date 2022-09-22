@@ -22,9 +22,9 @@ print(f)
 
 #########################
 # Index into array
-print(f[0:2])
-print(f[-5:len(f)])
-print(f[0:10:2])
+print(f[:2])
+print(f[-5:])
+print(f[:10:2])
 
 #########################
 # operations on arrays
