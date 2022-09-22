@@ -25,7 +25,7 @@ print(s_from_list)
 
 # Can index into series like a list or ndarray
 print(s_from_list[0])
-print(s_from_list[0:3])
+print(s_from_list[:3])
 
 print(s_from_list[[0,2]])
 

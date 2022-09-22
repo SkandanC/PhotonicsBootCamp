@@ -13,10 +13,7 @@ class Item:
     @staticmethod
     def parseItem(line):
         strings = line.split()
-        if(strings[0] == "Grain"):
-            return Grain(strings)
-        else:
-            return Produce(strings)
+        return Grain(strings) if (strings[0] == "Grain") else Produce(strings)
         
 
 class Produce (Item):
@@ -24,14 +21,14 @@ class Produce (Item):
         super().__init__(strings) 
         self.color = strings[4]
     def toString(self):
-        return self.color + " "+super().toString()
+        return f"{self.color} {super().toString()}"
 
 class Grain(Item):
     def __init__(self, strings):
         super().__init__(strings) 
         self.weight = float(strings[4])
     def toString(self):
-        return f"{self.weight:.2f} lb "+super().toString()
+        return f"{self.weight:.2f} lb {super().toString()}"
 
 def main():
     if len(sys.argv) < 2:
@@ -48,7 +45,7 @@ def main():
             grains.append(item)
         else:
             produce.append(item)
-    
+
     with open("output.txt","w") as file:
         file.write("All Items:\n")
         cost = 0.0

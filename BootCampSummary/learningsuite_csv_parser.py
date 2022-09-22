@@ -52,7 +52,7 @@ def get_module_info(file_name, data):
             float_hours.insert(0, value)
     string_hours = [str(x) for x in float_hours]
     comments = [str(x) for x in data.iloc[:, 9]]
-    if file_name[0:38] == "Student Answers for Computing Bootcamp":
+    if file_name[:38] == "Student Answers for Computing Bootcamp":
         new_file_name = f"{file_name[39:-4].replace(' ', '')}_Results.txt"
     elif file_name[-11:] == "_Module.csv":
         new_file_name = f"{file_name[:-11]}_Results.txt"
@@ -76,7 +76,7 @@ def get_module_info(file_name, data):
 
 # read module data and organize data by student
 def get_student_info(file_name, data):
-    if file_name[0:38] == "Student Answers for Computing Bootcamp":
+    if file_name[:38] == "Student Answers for Computing Bootcamp":
         module_name = file_name[39:-4].replace(" ", "")
     elif file_name[-11:] == "_Module.csv":
         module_name = file_name[:-11]
@@ -116,14 +116,16 @@ def create_student_summaries():
 
 # remove students who have completed 0 modules
 def remove_nonparticipants(modules, hours):
-    new_modules = {}
     new_hours = {}
     for student in modules:
         if len(modules[student]) < 1:
             zero_modules_completed.append(student)
-    for student in modules:
-        if student not in zero_modules_completed:
-            new_modules[student] = len(modules[student])
+    new_modules = {
+        student: len(modules[student])
+        for student in modules
+        if student not in zero_modules_completed
+    }
+
     for student in student_hours:
         if student not in zero_modules_completed:
             total_time = 0
@@ -135,7 +137,7 @@ def remove_nonparticipants(modules, hours):
 
 
 def get_module_summary_info():
-    if file_name[0:38] == "Student Answers for Computing Bootcamp":
+    if file_name[:38] == "Student Answers for Computing Bootcamp":
         module_name = file_name[39:-4].replace(" ", "")
     elif file_name[-11:] == "_Module.csv":
         module_name = file_name[:-11]
@@ -148,7 +150,7 @@ def get_module_summary_info():
             float_hours.insert(0, value)
     student_list = data.iloc[:, 0]
     i = 0
-    for student in student_list:
+    for _ in student_list:
         student_data = data.iloc[i, :]
         if student_data[6] == "A":
             num_participants = num_participants + 1
@@ -160,15 +162,11 @@ def get_module_summary_info():
 # create file and histograms that give overall sumamry of data
 def create_full_summary():
     os.chdir(bootcampSummary_dir_path)
-    time_data = []
-    num_modules_data = []
     modules_list = list(module_participants.keys())
     modules_hours_list = list(module_hours.values())
     module_participants_list = list(module_participants.values())
-    for student in student_hours:
-        time_data.append(student_hours[student])
-    for student in student_modules:
-        num_modules_data.append(student_modules[student])
+    time_data = [student_hours[student] for student in student_hours]
+    num_modules_data = [student_modules[student] for student in student_modules]
     time_data = np.sort(time_data)
     string_time_data = [str(x) for x in time_data]
     num_modules_data = np.sort(num_modules_data)
